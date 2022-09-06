@@ -1,0 +1,34 @@
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+project.afterEvaluate {
+    tasks.named("preBuild"){
+        dependsOn("detekt")
+    }
+}
+
+detekt {
+    //toolVersion = "$detekt_version"
+    def inputDirFiles = []
+    rootProject.subprojects.forEach { module->
+        inputDirFiles << "$module.projectDir/src/main/java"
+    }
+    source = files(inputDirFiles)
+    autoCorrect = true
+    allRules = false // activate all available (even unstable) rules.
+    config = files("$rootDir/config/detekt/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+
+    reports {
+        xml {
+            enabled = true
+            destination = file("$buildDir(/reports/detekt/detekt.xml)")
+        }
+        html {
+            enabled = true
+            destination = file("$buildDir(/reports/detekt/detekt.html)")
+        }
+        txt {
+            enabled = true
+            destination = file("$buildDir(/reports/detekt/detekt.txt)")
+        }
+    }
+}
