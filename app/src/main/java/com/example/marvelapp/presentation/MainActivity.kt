@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupWithNavController
 import com.example.marvelapp.R
 import com.example.marvelapp.databinding.ActivityMainBinding
 import java.security.AccessControlContext
@@ -23,6 +24,20 @@ class MainActivity : AppCompatActivity() {
                 as NavHostFragment
 
         navController = navHostFragment.navController
-        appBarConfigurattion = AppBarConfiguration(setOf())
+
+        binding.bottomNavMain.setupWithNavController(navController)
+
+        appBarConfigurattion = AppBarConfiguration(setOf(R.id.charactersFragment,
+            R.id.favoritesFragment,R.id.aboutFragment))
+
+        binding.toolbarApp.setupWithNavController(navController, appBarConfigurattion)
+
+        navController.addOnDestinationChangedListener {_,destination,_->
+            val isTopLevelDestination = appBarConfigurattion.topLevelDestinations.contains(destination.id)
+            if (!isTopLevelDestination){
+                binding.toolbarApp.setCollapseIcon(R.drawable.ic_back)
+            }
+
+        }
     }
 }
