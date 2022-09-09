@@ -1,4 +1,4 @@
-package me.davidsonsilva.core.data.network.response
+package com.example.marvelapp.framework.network.response
 
 data class DataWrapperResponse(
     val copyright: String,
