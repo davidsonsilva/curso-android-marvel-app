@@ -1,6 +1,7 @@
 package com.example.marvelapp.framework.di
 
 import com.example.marvelapp.BuildConfig
+import com.example.marvelapp.framework.network.MarvelApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -63,12 +64,13 @@ object NetworkModule {
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
         converterFactory: MoshiConverterFactory
-    ): Retrofit {
+    ): MarvelApi {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(converterFactory)
             .build()
+            .create(MarvelApi::class.java)
     }
 
 }
