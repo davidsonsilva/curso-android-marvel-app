@@ -1,5 +1,6 @@
 package com.example.marvelapp.framework.paging
 
+import android.annotation.SuppressLint
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.marvelapp.framework.network.response.DataWrapperResponse
@@ -12,12 +13,13 @@ class CharactersPagingSource(
     private val query: String
 ) : PagingSource<Int, Character>() {
 
+    @Suppress("TooGenericExceptionCaught")
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
         return try {
             val offSet = params.key ?: 0
 
             val queries = hashMapOf(
-                "offSet" to offSet.toString()
+                "offset" to offSet.toString()
             )
 
             if (query.isNotEmpty()) {
@@ -26,7 +28,7 @@ class CharactersPagingSource(
 
             val response = remoteDataSource.fetchCharacters(queries)
 
-            val responseOffSet = response.data.offSet
+            val responseOffSet = response.data.offset
             val totalCharacters = response.data.total
 
             LoadResult.Page(

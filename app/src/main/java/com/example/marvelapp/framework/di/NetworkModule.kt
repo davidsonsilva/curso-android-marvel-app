@@ -10,8 +10,9 @@ import com.example.marvelapp.framework.network.interceptor.AuthorizationIntercep
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
-import java.util.*
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.TimeZone
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 @Module
@@ -56,14 +57,14 @@ object NetworkModule {
     }
 
     @Provides
-    fun provideMoshiConverterFactory(): MoshiConverterFactory {
-        return MoshiConverterFactory.create()
+    fun provideGsonConverterFactory(): GsonConverterFactory {
+        return GsonConverterFactory.create()
     }
 
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        converterFactory: MoshiConverterFactory
+        converterFactory: GsonConverterFactory
     ): MarvelApi {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)

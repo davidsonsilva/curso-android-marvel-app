@@ -21,7 +21,7 @@ class AuthorizationInterceptor(
         val hash = "$ts$privateKey$publicKey".md5()
         val newUrl = requestUrl.newBuilder()
             .addQueryParameter(QUERY_PARAMETER_TS,ts)
-            .addQueryParameter(QUERY_PARAMETER_API_KEY,publicKey)
+            .addQueryParameter(QUERY_PARAMETER_API_KEY, publicKey)
             .addQueryParameter(QUERY_PARAMETER_HASH,hash)
             .build()
 
@@ -36,7 +36,7 @@ class AuthorizationInterceptor(
 
     companion object{
         private const val QUERY_PARAMETER_TS = "ts"
-        private const val QUERY_PARAMETER_API_KEY = "apiKey"
+        private const val QUERY_PARAMETER_API_KEY = "apikey"
         private const val QUERY_PARAMETER_HASH = "hash"
     }
 }

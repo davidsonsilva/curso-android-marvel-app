@@ -13,6 +13,6 @@ class CharactersRepositoryImpl @Inject constructor(
 ) : CharactersRepository {
 
     override fun getCharacters(query: String): PagingSource<Int, Character> {
-        return CharactersPagingSource(remoteDataSource = remoteDataSource, query = query)
+        return CharactersPagingSource(remoteDataSource = remoteDataSource,  query = query)
     }
 }

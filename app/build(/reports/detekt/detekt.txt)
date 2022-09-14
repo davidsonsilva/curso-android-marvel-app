@@ -1,2 +1,0 @@
-TooGenericExceptionCaught - [exception] at C:\Developer\curso-android-marvel-app\app\src\main\java\com\example\marvelapp\framework\paging\CharactersPagingSource.kt:39:17 - Signature=CharactersPagingSource.kt$CharactersPagingSource$exception:Exception
-UnusedPrivateMember - [remoteDataSource] at C:\Developer\curso-android-marvel-app\app\src\main\java\com\example\marvelapp\framework\CharactersRepositoryImpl.kt:12:5 - Signature=CharactersRepositoryImpl.kt$CharactersRepositoryImpl$private val remoteDataSource:CharactersRemoteDataSource<DataWrapperResponse>

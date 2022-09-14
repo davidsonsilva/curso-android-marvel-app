@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity() {
             if (!isTopLevelDestination){
                 binding.toolbarApp.setCollapseIcon(R.drawable.ic_back)
             }
-
         }
     }
 }

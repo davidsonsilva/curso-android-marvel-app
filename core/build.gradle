@@ -16,9 +16,12 @@ dependencies {
     api("com.squareup.okhttp3:logging-interceptor")
 
     //Moshi
-    def moshi_version = '1.11.0'
+/*    def moshi_version = '1.11.0'
     api("com.squareup.moshi:moshi-kotlin:$moshi_version")
-    api "com.squareup.retrofit2:converter-moshi:2.4.0"
+    api "com.squareup.retrofit2:converter-moshi:2.4.0"*/
+
+    def gson_version = '2.8.9'
+    api "com.google.code.gson:gson:$gson_version"
 
     // Retrofit
     def retrofit_version = '2.9.0'
@@ -31,6 +34,6 @@ dependencies {
     //Javax Inject
     implementation("javax.inject:javax.inject:1")
 
-    //Courotines core
+    //Coroutines core
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
 }
