@@ -1,6 +1,5 @@
 package com.example.marvelapp.framework.paging
 
-import android.annotation.SuppressLint
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.marvelapp.framework.network.response.DataWrapperResponse
