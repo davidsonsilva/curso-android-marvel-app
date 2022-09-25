@@ -13,9 +13,11 @@ import kotlinx.coroutines.test.runTest
 import me.davidsonsilva.core.data.repository.CharactersRepository
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.junit.MockitoJUnitRunner
 
-
+@RunWith(MockitoJUnitRunner::class)
 class GetCharactersUseCaseImplTest:BaseTest() {
 
     private lateinit var getCharactersUseCase: GetCharactersUseCase
