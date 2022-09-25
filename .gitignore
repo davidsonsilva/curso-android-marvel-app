@@ -17,4 +17,3 @@ apikey.properties
 /build/reports/
 /app/build(/reports/detekt/detekt.html)
 /store
-/app/google-services.json
