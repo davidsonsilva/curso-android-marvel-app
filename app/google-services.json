@@ -1,0 +1,97 @@
+{
+  "project_info": {
+    "project_number": "4523295494",
+    "project_id": "curso-android-marvel-app-e908e",
+    "storage_bucket": "curso-android-marvel-app-e908e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4523295494:android:4ce42d5adf06c502b89487",
+        "android_client_info": {
+          "package_name": "com.example.marvelapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4523295494-b95bl7q1vbvoe9tj81nh4vr39bm2ja00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD6DBg4yBFkws5NCQ_KFhfEZKMVhnoTTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4523295494-b95bl7q1vbvoe9tj81nh4vr39bm2ja00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4523295494:android:4e1905a3c6ebac62b89487",
+        "android_client_info": {
+          "package_name": "com.example.marvelapp.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4523295494-b95bl7q1vbvoe9tj81nh4vr39bm2ja00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD6DBg4yBFkws5NCQ_KFhfEZKMVhnoTTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4523295494-b95bl7q1vbvoe9tj81nh4vr39bm2ja00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4523295494:android:a444c3b50db28b13b89487",
+        "android_client_info": {
+          "package_name": "com.example.marvelapp.staging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4523295494-b95bl7q1vbvoe9tj81nh4vr39bm2ja00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD6DBg4yBFkws5NCQ_KFhfEZKMVhnoTTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4523295494-b95bl7q1vbvoe9tj81nh4vr39bm2ja00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,7 +4,7 @@ buildscript {
     ext.nav_version = "2.3.4"
     ext.hilt_version = '2.43.2'
     ext.detekt_version = '1.18.0'
-    ext.paging_version = "3.0.1"
+    ext.paging_version = "3.1.1"
     ext.coroutines_version = "1.5.1"
     //'2.43.2'
 
@@ -17,7 +17,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
-
+        classpath 'com.google.gms:google-services:4.3.13'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
