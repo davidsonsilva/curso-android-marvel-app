@@ -1,6 +1,11 @@
 package me.davidsonsilva.core.data.repository
 
-interface CharactersRemoteDataSource<T> {
+import me.davidsonsilva.core.domain.model.CharacterPaging
+import me.davidsonsilva.core.domain.model.Comic
 
-    suspend fun fetchCharacters(queries:Map<String,String>): T
+interface CharactersRemoteDataSource {
+
+    suspend fun fetchCharacters(queries:Map<String,String>): CharacterPaging
+
+    suspend fun fetchComics(characterId: Int): List<Comic>
 }

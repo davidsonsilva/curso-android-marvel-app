@@ -3,7 +3,6 @@ package com.example.marvelapp.framework.paging
 import androidx.paging.PagingSource
 import com.example.marvelapp.base.BaseTest
 import com.example.marvelapp.factory.response.DataWrapperResponseFactory
-import com.example.marvelapp.framework.network.response.DataWrapperResponse
 import com.example.testing.model.CharacterFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
@@ -11,6 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import me.davidsonsilva.core.data.repository.CharactersRemoteDataSource
 import me.davidsonsilva.core.domain.model.Character
+import me.davidsonsilva.core.domain.model.CharacterPaging
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class CharactersPagingSourceTest: BaseTest() {
 
     @Mock
-    lateinit var remoteDataSource: CharactersRemoteDataSource<DataWrapperResponse>
+    lateinit var remoteDataSource: CharactersRemoteDataSource
 
     private lateinit var charactersPagingSource: CharactersPagingSource
 
@@ -40,7 +40,7 @@ class CharactersPagingSourceTest: BaseTest() {
     fun `should return a success load result when is load is called`() = runTest {
         //Arrange
         whenever(remoteDataSource.fetchCharacters(any()))
-            .thenReturn(dataWrapperResponseFactory.create())
+            .thenReturn(dataWrapperResponseFactory.create() as CharacterPaging)
         //Act
         val result = charactersPagingSource.load(
             PagingSource.LoadParams.Refresh(
