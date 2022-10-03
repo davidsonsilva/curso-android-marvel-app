@@ -6,8 +6,8 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import me.davidsonsilva.core.usecase.GetCharactersUseCase
 import me.davidsonsilva.core.usecase.GetCharactersUseCaseImpl
-import me.davidsonsilva.core.usecase.GetComicsUseCase
-import me.davidsonsilva.core.usecase.GetComicsUseCaseImpl
+import me.davidsonsilva.core.usecase.GetCharacterCategoryUseCase
+import me.davidsonsilva.core.usecase.GetCharacterCategoryUseCaseImpl
 
 
 @Module
@@ -18,5 +18,5 @@ interface UseCaseModule {
     fun bindGetCharactersUseCase(useCAse: GetCharactersUseCaseImpl):GetCharactersUseCase
 
     @Binds
-    fun bindsGetComicsUseCase(useCase: GetComicsUseCaseImpl): GetComicsUseCase
+    fun bindsGetComicsUseCase(useCase: GetCharacterCategoryUseCaseImpl): GetCharacterCategoryUseCase
 }

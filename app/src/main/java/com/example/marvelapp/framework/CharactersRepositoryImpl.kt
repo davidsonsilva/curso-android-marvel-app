@@ -6,6 +6,7 @@ import me.davidsonsilva.core.data.repository.CharactersRemoteDataSource
 import me.davidsonsilva.core.data.repository.CharactersRepository
 import me.davidsonsilva.core.domain.model.Character
 import me.davidsonsilva.core.domain.model.Comic
+import me.davidsonsilva.core.domain.model.Event
 import javax.inject.Inject
 
 class CharactersRepositoryImpl @Inject constructor(
@@ -19,4 +20,9 @@ class CharactersRepositoryImpl @Inject constructor(
     override suspend fun getComics(characterId: Int): List<Comic> {
         return remoteDataSource.fetchComics(characterId)
     }
+
+    override suspend fun getEvents(characterId: Int): List<Event> {
+        return remoteDataSource.fetchEvents(characterId)
+    }
+
 }
