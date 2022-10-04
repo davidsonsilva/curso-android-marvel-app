@@ -1,4 +1,4 @@
-package me.davidsonsilva.core.usecase.base
+package me.davidsonsilva.core.base
 
 sealed class ResultStatus<out  T> {
 
