@@ -10,6 +10,7 @@ detekt {
     //toolVersion = "$detekt_version"
     def inputDirFiles = []
     rootProject.subprojects.forEach { module->
+        if(module.name != "testing")
         inputDirFiles << "$module.projectDir/src/main/java"
     }
     source = files(inputDirFiles)

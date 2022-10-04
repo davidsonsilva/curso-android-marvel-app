@@ -2,8 +2,7 @@ package com.example.marvelapp.framework.paging
 
 import androidx.paging.PagingSource
 import com.example.marvelapp.base.BaseTest
-import com.example.marvelapp.factory.response.DataWrapperResponseFactory
-import com.example.marvelapp.framework.network.response.DataWrapperResponse
+import com.example.marvelapp.factory.response.CharacterPagingFactory
 import com.example.testing.model.CharacterFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
@@ -11,6 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import me.davidsonsilva.core.data.repository.CharactersRemoteDataSource
 import me.davidsonsilva.core.domain.model.Character
+import me.davidsonsilva.core.domain.model.CharacterPaging
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -18,15 +18,16 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CharactersPagingSourceTest: BaseTest() {
 
     @Mock
-    lateinit var remoteDataSource: CharactersRemoteDataSource<DataWrapperResponse>
+    lateinit var remoteDataSource: CharactersRemoteDataSource
 
     private lateinit var charactersPagingSource: CharactersPagingSource
 
-    private val dataWrapperResponseFactory = DataWrapperResponseFactory()
+    private val dataWrapperResponseFactory = CharacterPagingFactory()
 
     private val characterFactory = CharacterFactory()
 
@@ -35,7 +36,7 @@ class CharactersPagingSourceTest: BaseTest() {
         charactersPagingSource = CharactersPagingSource(remoteDataSource, "")
     }
 
-    @ExperimentalCoroutinesApi
+
     @Test
     fun `should return a success load result when is load is called`() = runTest {
         //Arrange
@@ -48,9 +49,9 @@ class CharactersPagingSourceTest: BaseTest() {
                 loadSize = 2,
                 placeholdersEnabled = false
             )
-        )
 
-        //Assert
+            //Assert
+        )
         val expected = listOf(
             characterFactory.create(CharacterFactory.Hero.ThreeDMan),
             characterFactory.create(CharacterFactory.Hero.ABomb)
@@ -66,7 +67,7 @@ class CharactersPagingSourceTest: BaseTest() {
         )
     }
 
-    @ExperimentalCoroutinesApi
+
     @Test
     fun `should return a error when load is called`() = runTest {
 

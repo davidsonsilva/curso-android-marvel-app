@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import me.davidsonsilva.core.data.repository.CharactersRepository
 import me.davidsonsilva.core.domain.model.Character
 import me.davidsonsilva.core.usecase.GetCharactersUseCase.GetCharactersParams
-import me.davidsonsilva.core.usecase.base.PagingUseCase
+import me.davidsonsilva.core.base.PagingUseCase
 import javax.inject.Inject
 
 interface GetCharactersUseCase {
