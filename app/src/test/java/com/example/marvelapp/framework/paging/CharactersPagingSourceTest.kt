@@ -2,7 +2,7 @@ package com.example.marvelapp.framework.paging
 
 import androidx.paging.PagingSource
 import com.example.marvelapp.base.BaseTest
-import com.example.marvelapp.factory.response.DataWrapperResponseFactory
+import com.example.marvelapp.factory.response.CharacterPagingFactory
 import com.example.testing.model.CharacterFactory
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.whenever
@@ -18,6 +18,7 @@ import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 
+@ExperimentalCoroutinesApi
 @RunWith(MockitoJUnitRunner::class)
 class CharactersPagingSourceTest: BaseTest() {
 
@@ -26,7 +27,7 @@ class CharactersPagingSourceTest: BaseTest() {
 
     private lateinit var charactersPagingSource: CharactersPagingSource
 
-    private val dataWrapperResponseFactory = DataWrapperResponseFactory()
+    private val dataWrapperResponseFactory = CharacterPagingFactory()
 
     private val characterFactory = CharacterFactory()
 
@@ -35,12 +36,12 @@ class CharactersPagingSourceTest: BaseTest() {
         charactersPagingSource = CharactersPagingSource(remoteDataSource, "")
     }
 
-    @ExperimentalCoroutinesApi
+
     @Test
     fun `should return a success load result when is load is called`() = runTest {
         //Arrange
         whenever(remoteDataSource.fetchCharacters(any()))
-            .thenReturn(dataWrapperResponseFactory.create() as CharacterPaging)
+            .thenReturn(dataWrapperResponseFactory.create())
         //Act
         val result = charactersPagingSource.load(
             PagingSource.LoadParams.Refresh(
@@ -48,9 +49,9 @@ class CharactersPagingSourceTest: BaseTest() {
                 loadSize = 2,
                 placeholdersEnabled = false
             )
-        )
 
-        //Assert
+            //Assert
+        )
         val expected = listOf(
             characterFactory.create(CharacterFactory.Hero.ThreeDMan),
             characterFactory.create(CharacterFactory.Hero.ABomb)
@@ -66,7 +67,7 @@ class CharactersPagingSourceTest: BaseTest() {
         )
     }
 
-    @ExperimentalCoroutinesApi
+
     @Test
     fun `should return a error when load is called`() = runTest {
 

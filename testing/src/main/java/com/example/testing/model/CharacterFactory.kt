@@ -10,7 +10,7 @@ class CharacterFactory {
             imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784.jpg"
         )
         Hero.ABomb -> Character(
-            id = 0,
+            id = 1017100,
             name = "A-Bomb (HAS)",
             imageUrl = "https://i.annihil.us/u/prod/marvel/i/mg/3/20/523215de5b16.jpg"
         )

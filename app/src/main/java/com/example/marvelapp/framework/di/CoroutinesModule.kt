@@ -1,20 +1,18 @@
 package com.example.marvelapp.framework.di
 
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.Dispatchers
-import me.davidsonsilva.core.usecase.base.AppCoroutinesDispatchers
+import me.davidsonsilva.core.base.AppCoroutinesDispatchers
+import me.davidsonsilva.core.base.CoroutinesDispatchers
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CoroutinesModule {
+interface CoroutinesModule {
 
-    @Provides
-    fun providesDispatchers() = AppCoroutinesDispatchers(
-        Dispatchers.IO,
-        Dispatchers.Default,
-        Dispatchers.Main
-    )
+    @Binds
+    fun bindDispatchers(dispatchers: AppCoroutinesDispatchers) : CoroutinesDispatchers
+
 }

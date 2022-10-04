@@ -7,24 +7,23 @@ import androidx.lifecycle.viewModelScope
 import com.example.marvelapp.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import me.davidsonsilva.core.domain.model.Comic
 import me.davidsonsilva.core.domain.model.Event
-import me.davidsonsilva.core.usecase.GetCharacterCategoryUseCase
-import me.davidsonsilva.core.usecase.base.ResultStatus
+import me.davidsonsilva.core.usecase.GetCharacterCategoriesUseCase
+import me.davidsonsilva.core.base.ResultStatus
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    private val getCharacterCategoryUseCase: GetCharacterCategoryUseCase
+    private val getCharacterCategoriesUseCase: GetCharacterCategoriesUseCase
 ): ViewModel(){
 
     private val _uiState = MutableLiveData<UiState>()
     val uiState: LiveData<UiState> get() = _uiState
 
     fun getCharacterCategories(characterId: Int) = viewModelScope.launch {
-        getCharacterCategoryUseCase(GetCharacterCategoryUseCase.GetComicsParams(characterId))
+        getCharacterCategoriesUseCase(GetCharacterCategoriesUseCase.GetCategoriesParams(characterId))
             .watchStatus()
     }
 
