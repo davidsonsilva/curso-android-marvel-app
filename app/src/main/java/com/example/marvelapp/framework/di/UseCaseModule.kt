@@ -12,7 +12,8 @@ import me.davidsonsilva.core.usecase.AddFavoriteUseCaseImpl
 import me.davidsonsilva.core.usecase.AddFavoriteUseCase
 import me.davidsonsilva.core.usecase.CheckFavoriteUseCaseImpl
 import me.davidsonsilva.core.usecase.CheckFavoriteUseCase
-
+import me.davidsonsilva.core.usecase.RemoveFavoriteUseCase
+import me.davidsonsilva.core.usecase.RemoveFavoriteUseCaseImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -29,4 +30,7 @@ interface UseCaseModule {
 
     @Binds
     fun bindAddFavoriteUseCase(useCase:AddFavoriteUseCaseImpl): AddFavoriteUseCase
+
+    @Binds
+    fun bindRemoveFavoriteUseCase(useCase: RemoveFavoriteUseCaseImpl): RemoveFavoriteUseCase
 }
