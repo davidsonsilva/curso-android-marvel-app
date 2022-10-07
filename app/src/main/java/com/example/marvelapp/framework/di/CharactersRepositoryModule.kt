@@ -11,7 +11,7 @@ import me.davidsonsilva.core.data.repository.CharactersRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface RepositoryModule {
+interface CharactersRepositoryModule {
 
     @Binds
     fun bindCharacterRepository(repository: CharactersRepositoryImpl): CharactersRepository

@@ -9,6 +9,7 @@ import com.example.marvelapp.R
 import com.example.marvelapp.base.BaseFragmentTest
 import com.example.marvelapp.extension.asJsonString
 import com.example.marvelapp.framework.di.BaseUrlModule
+import com.example.marvelapp.framework.di.CoroutinesModule
 import com.example.marvelapp.launchFragmentInHiltContainer
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
@@ -20,7 +21,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-@UninstallModules(BaseUrlModule::class)
+@UninstallModules(BaseUrlModule::class, CoroutinesModule::class)
 @HiltAndroidTest
 class CharactersFragmentTest : BaseFragmentTest() {
 

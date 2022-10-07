@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import me.davidsonsilva.core.base.AppCoroutinesDispatchers
+import me.davidsonsilva.core.base.CoroutinesDispatchers
 import me.davidsonsilva.core.usecase.GetCharactersUseCase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -28,6 +30,7 @@ class CharactersViewModelTest: BaseTest() {
     @Mock
     lateinit var  charactersUseCase: GetCharactersUseCase
     private lateinit var charactersViewModel: CharactersViewModel
+    private lateinit var coroutinesDispatchers: CoroutinesDispatchers
     private val charactersFactory = CharacterFactory()
     private val pagingDataCharacter = PagingData.from(
         listOf(
@@ -38,7 +41,8 @@ class CharactersViewModelTest: BaseTest() {
 
     @Before
     fun setup(){
-        charactersViewModel = CharactersViewModel(charactersUseCase)
+        coroutinesDispatchers = AppCoroutinesDispatchers()
+        charactersViewModel = CharactersViewModel(charactersUseCase,coroutinesDispatchers)
     }
 
 
