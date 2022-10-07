@@ -10,6 +10,8 @@ import me.davidsonsilva.core.usecase.GetCharacterCategoriesUseCase
 import me.davidsonsilva.core.usecase.GetCharacterCategoriesUseCaseImpl
 import me.davidsonsilva.core.usecase.AddFavoriteUseCaseImpl
 import me.davidsonsilva.core.usecase.AddFavoriteUseCase
+import me.davidsonsilva.core.usecase.CheckFavoriteUseCaseImpl
+import me.davidsonsilva.core.usecase.CheckFavoriteUseCase
 
 
 @Module
@@ -21,6 +23,9 @@ interface UseCaseModule {
 
     @Binds
     fun bindsGetComicsUseCase(useCase: GetCharacterCategoriesUseCaseImpl): GetCharacterCategoriesUseCase
+
+    @Binds
+    fun bindCheckFavoriteUseCase(useCase: CheckFavoriteUseCaseImpl): CheckFavoriteUseCase
 
     @Binds
     fun bindAddFavoriteUseCase(useCase:AddFavoriteUseCaseImpl): AddFavoriteUseCase

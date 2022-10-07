@@ -9,11 +9,13 @@ import androidx.lifecycle.switchMap
 import com.example.marvelapp.R
 import com.example.marvelapp.presentation.extensions.watchStatus
 import me.davidsonsilva.core.usecase.AddFavoriteUseCase
+import me.davidsonsilva.core.usecase.CheckFavoriteUseCase
 import kotlin.coroutines.CoroutineContext
 
 class FavoriteUiActonStateLivedata(
     private val coroutineContext: CoroutineContext,
-    private val addFavoriteUseCase: AddFavoriteUseCase
+    private val addFavoriteUseCase: AddFavoriteUseCase,
+    private val checkFavoriteUseCase: CheckFavoriteUseCase
 ) {
 
     private val action = MutableLiveData<Action>()
@@ -21,8 +23,18 @@ class FavoriteUiActonStateLivedata(
     val state : LiveData<UiState> = action.switchMap {
         liveData(coroutineContext) {
             when(it){
-                Action.Default -> {
-                    emit(UiState.Icon(R.drawable.ic_favorite_unchecked))
+                is Action.CheckFavorite -> {
+                    checkFavoriteUseCase.invoke(
+                        CheckFavoriteUseCase.Params(
+                        characterId = it.characterId)
+                    ).watchStatus(
+                        success = { isFavorite ->
+                            val icon = if (isFavorite) R.drawable.ic_favorite_checked
+                            else R.drawable.ic_favorite_unchecked
+                            emit(UiState.Icon(icon))
+                        },
+                        error = {}
+                    )
                 }
                 is Action.Update -> {
                     it.detailViewArgs.run {
@@ -45,8 +57,8 @@ class FavoriteUiActonStateLivedata(
         }
     }
 
-    fun setDefault() {
-         action.value = Action.Default
+    fun checkFavorite(characterId: Int) {
+         action.value = Action.CheckFavorite(characterId)
     }
 
     fun update(detailViewArgs: DetailViewArgs) {
@@ -60,7 +72,7 @@ class FavoriteUiActonStateLivedata(
     }
 
     sealed class Action {
-        object Default : Action()
+        data class CheckFavorite(val characterId: Int) : Action()
         data class Update(val detailViewArgs: DetailViewArgs) : Action()
     }
 }
