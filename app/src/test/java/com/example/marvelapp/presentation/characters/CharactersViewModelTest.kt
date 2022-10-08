@@ -30,7 +30,6 @@ class CharactersViewModelTest: BaseTest() {
     @Mock
     lateinit var  charactersUseCase: GetCharactersUseCase
     private lateinit var charactersViewModel: CharactersViewModel
-    private lateinit var coroutinesDispatchers: CoroutinesDispatchers
     private val charactersFactory = CharacterFactory()
     private val pagingDataCharacter = PagingData.from(
         listOf(
@@ -41,8 +40,8 @@ class CharactersViewModelTest: BaseTest() {
 
     @Before
     fun setup(){
-        coroutinesDispatchers = AppCoroutinesDispatchers()
-        charactersViewModel = CharactersViewModel(charactersUseCase,coroutinesDispatchers)
+        charactersViewModel = CharactersViewModel(charactersUseCase,
+            mainCoroutineRule.testDispatcherProvider)
     }
 
 

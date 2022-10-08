@@ -2,6 +2,7 @@ package com.example.marvelapp.presentation.detail
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataScope
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +15,7 @@ import me.davidsonsilva.core.usecase.CheckFavoriteUseCase
 import me.davidsonsilva.core.usecase.RemoveFavoriteUseCase
 import kotlin.coroutines.CoroutineContext
 
-class FavoriteUiActonStateLivedata(
+class FavoriteUiActionStateLivedata(
     private val coroutineContext: CoroutineContext,
     private val addFavoriteUseCase: AddFavoriteUseCase,
     private val checkFavoriteUseCase: CheckFavoriteUseCase,
@@ -22,7 +23,9 @@ class FavoriteUiActonStateLivedata(
 ) {
 
     private val action = MutableLiveData<Action>()
-    private var currentFavoriteIcon = R.drawable.ic_favorite_unchecked
+
+    @set:VisibleForTesting
+    var currentFavoriteIcon = R.drawable.ic_favorite_unchecked
 
     val state : LiveData<UiState> = action.switchMap {
         liveData(coroutineContext) {

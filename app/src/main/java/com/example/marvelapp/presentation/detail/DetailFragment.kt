@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -86,12 +85,12 @@ class DetailFragment : Fragment() {
 
             state.observe(viewLifecycleOwner) { uiState ->
                 binding.flipperFavorite.displayedChild = when (uiState) {
-                    FavoriteUiActonStateLivedata.UiState.Loading -> FLIPPER_FAVORITE_CHILD_POSITION_LOADING
-                    is FavoriteUiActonStateLivedata.UiState.Icon -> {
+                    FavoriteUiActionStateLivedata.UiState.Loading -> FLIPPER_FAVORITE_CHILD_POSITION_LOADING
+                    is FavoriteUiActionStateLivedata.UiState.Icon -> {
                         binding.imageFavoriteIcon.setImageResource(uiState.icon)
                         FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
                     }
-                    is FavoriteUiActonStateLivedata.UiState.Error -> {
+                    is FavoriteUiActionStateLivedata.UiState.Error -> {
                         showLongToast(uiState.messageResId)
                         FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
                     }

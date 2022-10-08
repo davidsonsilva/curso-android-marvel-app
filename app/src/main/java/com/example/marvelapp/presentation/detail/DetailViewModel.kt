@@ -23,7 +23,7 @@ class DetailViewModel @Inject constructor(
         getCharacterCategoriesUseCase
     )
 
-    val favorite = FavoriteUiActonStateLivedata(
+    val favorite = FavoriteUiActionStateLivedata(
         coroutinesDispatchers.main(),
         addFavoriteUseCase,
         checkFavoriteUseCase,
