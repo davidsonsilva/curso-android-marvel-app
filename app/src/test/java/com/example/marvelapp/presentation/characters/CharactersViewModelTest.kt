@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.count
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import me.davidsonsilva.core.base.AppCoroutinesDispatchers
+import me.davidsonsilva.core.base.CoroutinesDispatchers
 import me.davidsonsilva.core.usecase.GetCharactersUseCase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -38,7 +40,8 @@ class CharactersViewModelTest: BaseTest() {
 
     @Before
     fun setup(){
-        charactersViewModel = CharactersViewModel(charactersUseCase)
+        charactersViewModel = CharactersViewModel(charactersUseCase,
+            mainCoroutineRule.testDispatcherProvider)
     }
 
 

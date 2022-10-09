@@ -7,9 +7,7 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -29,7 +27,23 @@ class CharactersFragment : Fragment() {
 
     private val viewModel: CharactersViewModel by viewModels()
 
-    lateinit var charactersAdapter : CharactersAdapter
+    private val charactersAdapter: CharactersAdapter by lazy {
+        CharactersAdapter(imageLoader = imageLoader){character, view ->
+            val extras = FragmentNavigatorExtras(
+                view to character.name
+            )
+            val directions = CharactersFragmentDirections
+                .actionCharactersFragmentToDetailFragment(
+                    character.name,
+                    DetailViewArgs(
+                        characterId = character.id,
+                        name = character.name,
+                        imageUrl = character.imageUrl)
+                )
+
+            findNavController().navigate(directions = directions, extras)
+        }
+    }
 
     @Inject
     lateinit var imageLoader: ImageLoader
@@ -46,39 +60,29 @@ class CharactersFragment : Fragment() {
         initCharactersAdapter()
         observeInitialLoadState()
 
-        lifecycleScope.launch {
-            viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.charactersPagingData("").collect{ pagingData ->
-                    charactersAdapter.submitData(pagingData)
+        viewModel.state.observe(viewLifecycleOwner) { uiState ->
+            when (uiState) {
+                is CharactersViewModel.UiState.SearchResult -> {
+                    charactersAdapter.submitData(viewLifecycleOwner.lifecycle, uiState.data)
                 }
             }
         }
+        viewModel.searchCharacters()
     }
 
     private fun initCharactersAdapter() {
-        charactersAdapter = CharactersAdapter(imageLoader = imageLoader){character, view ->
-            val extras = FragmentNavigatorExtras(
-                view to character.name
-            )
-            val directions = CharactersFragmentDirections
-                .actionCharactersFragmentToDetailFragment(
-                    character.name,
-                    DetailViewArgs(
-                        characterId = character.id,
-                        name = character.name,
-                        imageUrl = character.imageUrl)
-                )
-
-            findNavController().navigate(directions = directions, extras)
-        }
+        postponeEnterTransition()
         with(binding.recyclerCharacters){
-            scrollToPosition(0)
             setHasFixedSize(true)
             adapter = charactersAdapter.withLoadStateFooter(
                 footer = CharactersLoadStateAdapter(
                     charactersAdapter::retry
                 )
             )
+            viewTreeObserver.addOnPreDrawListener {
+                startPostponedEnterTransition()
+                true
+            }
         }
     }
 

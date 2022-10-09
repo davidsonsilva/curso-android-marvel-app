@@ -10,6 +10,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.transition.TransitionInflater
 import com.example.marvelapp.databinding.FragmentDetailBinding
 import com.example.marvelapp.framework.imageloader.ImageLoader
+import com.example.marvelapp.presentation.extensions.showLongToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,31 +42,61 @@ class DetailFragment : Fragment() {
         }
         setSharedElementTransitionOnEnter()
 
-        viewModel.uiState.observe(viewLifecycleOwner){ uiState->
-           binding.flipperDetail.displayedChild =  when(uiState){
-                DetailViewModel.UiState.Loading -> {
+        loadCategoriesObserveUiState(detailViewArgs)
+
+        setObserveFavoriteUiState(detailViewArgs)
+
+    }
+
+    private fun loadCategoriesObserveUiState(detailViewArgs: DetailViewArgs) {
+        viewModel.categories.load(detailViewArgs.characterId)
+        viewModel.categories.state.observe(viewLifecycleOwner) { uiState ->
+            binding.flipperDetail.displayedChild =  when(uiState){
+                UiActionStateLiveData.UiState.Loading -> {
                     FLIPPER_CHILD_POSITION_LOADING
                 }
-                is DetailViewModel.UiState.Success -> {
+                is UiActionStateLiveData.UiState.Success -> {
                     binding.recyclerParentDetail.run {
                         setHasFixedSize(true)
                         adapter = DetailParentAdapter(uiState.detailParentList, imageLoader)
                     }
                     FLIPPER_CHILD_POSITION_DETAIL
                 }
-                is DetailViewModel.UiState.Error -> {
+                is UiActionStateLiveData.UiState.Error -> {
                     binding.includeErrorView.buttonRetry.setOnClickListener {
-                        viewModel.getCharacterCategories(detailViewArgs.characterId)
+                        viewModel.categories.load(detailViewArgs.characterId)
                     }
                     FLIPPER_CHILD_POSITION_ERROR
                 }
-               DetailViewModel.UiState.Empty -> {
-                   FLIPPER_CHILD_POSITION_EMPTY
-               }
+                UiActionStateLiveData.UiState.Empty -> {
+                    FLIPPER_CHILD_POSITION_EMPTY
+                }
             }
         }
+    }
 
-        viewModel.getCharacterCategories(detailViewArgs.characterId)
+    private fun setObserveFavoriteUiState(detailViewArgs: DetailViewArgs) {
+
+        viewModel.favorite.run {
+            checkFavorite(detailViewArgs.characterId)
+            binding.imageFavoriteIcon.setOnClickListener {
+                viewModel.favorite.update(detailViewArgs)
+            }
+
+            state.observe(viewLifecycleOwner) { uiState ->
+                binding.flipperFavorite.displayedChild = when (uiState) {
+                    FavoriteUiActionStateLivedata.UiState.Loading -> FLIPPER_FAVORITE_CHILD_POSITION_LOADING
+                    is FavoriteUiActionStateLivedata.UiState.Icon -> {
+                        binding.imageFavoriteIcon.setImageResource(uiState.icon)
+                        FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
+                    }
+                    is FavoriteUiActionStateLivedata.UiState.Error -> {
+                        showLongToast(uiState.messageResId)
+                        FLIPPER_FAVORITE_CHILD_POSITION_IMAGE
+                    }
+                }
+            }
+        }
     }
 
     // Define a animação da transição como "move"
@@ -77,8 +108,8 @@ class DetailFragment : Fragment() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         _binding = null
+        super.onDestroy()
     }
 
     companion object {
@@ -86,6 +117,8 @@ class DetailFragment : Fragment() {
         private const val FLIPPER_CHILD_POSITION_DETAIL = 1
         private const val FLIPPER_CHILD_POSITION_ERROR = 2
         private const val FLIPPER_CHILD_POSITION_EMPTY = 3
+        private const val FLIPPER_FAVORITE_CHILD_POSITION_IMAGE = 0
+        private const val FLIPPER_FAVORITE_CHILD_POSITION_LOADING = 1
     }
 
 }
