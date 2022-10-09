@@ -1,4 +1,4 @@
-package com.example.marvelapp.presentation.characters
+package com.example.marvelapp.presentation.characters.adapters
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
@@ -13,7 +13,7 @@ class CharactersAdapter @Inject constructor(
     private val onItemClicked: OnCharacterItemClick
 ) : PagingDataAdapter<Character, CharactersViewHolder>(diffCallBack) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersViewHolder {
-       return  CharactersViewHolder.create(parent, imageLoader,onItemClicked)
+       return CharactersViewHolder.create(parent, imageLoader, onItemClicked)
     }
 
     override fun onBindViewHolder(holder: CharactersViewHolder, position: Int) {

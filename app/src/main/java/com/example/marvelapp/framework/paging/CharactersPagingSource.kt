@@ -13,10 +13,10 @@ class CharactersPagingSource(
     @Suppress("TooGenericExceptionCaught")
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Character> {
         return try {
-            val offSet = params.key ?: 0
+            val offset = params.key ?: 0
 
             val queries = hashMapOf(
-                "offset" to offSet.toString()
+                "offset" to offset.toString()
             )
 
             if (query.isNotEmpty()) {

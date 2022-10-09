@@ -11,6 +11,7 @@ import com.example.marvelapp.extension.asJsonString
 import com.example.marvelapp.framework.di.BaseUrlModule
 import com.example.marvelapp.framework.di.CoroutinesModule
 import com.example.marvelapp.launchFragmentInHiltContainer
+import com.example.marvelapp.presentation.characters.adapters.CharactersViewHolder
 import dagger.hilt.android.testing.HiltAndroidTest
 import dagger.hilt.android.testing.UninstallModules
 import okhttp3.mockwebserver.MockResponse

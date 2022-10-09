@@ -1,9 +1,8 @@
-package com.example.marvelapp.presentation.characters
+package com.example.marvelapp.presentation.characters.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.marvelapp.R
 import com.example.marvelapp.databinding.ItemCharacterBinding
 import com.example.marvelapp.framework.imageloader.ImageLoader
 import com.example.marvelapp.util.OnCharacterItemClick
@@ -36,7 +35,7 @@ class CharactersViewHolder (
             parent: ViewGroup,
             imageLoader: ImageLoader,
             onItemClick: OnCharacterItemClick
-        ):  CharactersViewHolder {
+        ): CharactersViewHolder {
             val inflater = LayoutInflater.from(parent.context)
             val itemBinding = ItemCharacterBinding.inflate(inflater, parent, false)
             return CharactersViewHolder(itemBinding,imageLoader, onItemClick)

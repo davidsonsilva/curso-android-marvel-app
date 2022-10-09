@@ -2,7 +2,7 @@ package com.example.marvelapp.framework.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.marvelapp.framework.db.dao.AppDatabase
+import com.example.marvelapp.framework.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,4 +25,7 @@ object DatabaseModule {
 
     @Provides
     fun providesFavoriteDao(appDatabase: AppDatabase) = appDatabase.favoriteDao()
+
+    @Provides
+    fun provideCharacterDao(appDatabase: AppDatabase) = appDatabase.characterDao()
 }

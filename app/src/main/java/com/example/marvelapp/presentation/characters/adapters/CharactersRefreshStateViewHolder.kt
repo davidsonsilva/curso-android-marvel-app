@@ -1,4 +1,4 @@
-package com.example.marvelapp.presentation.characters
+package com.example.marvelapp.presentation.characters.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,9 +6,10 @@ import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.RecyclerView
 import com.example.marvelapp.databinding.ItemCharacterLoadMoreStateBinding
+import com.example.marvelapp.databinding.ItemCharacterRefreshStateBinding
 
-class CharactersLoadMoreStateViewHolder(
-    itemBinding:ItemCharacterLoadMoreStateBinding,
+class CharactersRefreshStateViewHolder(
+    itemBinding: ItemCharacterRefreshStateBinding,
     retry: () -> Unit
 ):RecyclerView.ViewHolder(itemBinding.root) {
 
@@ -26,11 +27,11 @@ class CharactersLoadMoreStateViewHolder(
     }
 
     companion object {
-        fun create(parent: ViewGroup, retry: () -> Unit):CharactersLoadMoreStateViewHolder {
-            val itemBinding = ItemCharacterLoadMoreStateBinding
+        fun create(parent: ViewGroup, retry: () -> Unit): CharactersRefreshStateViewHolder {
+            val itemBinding = ItemCharacterRefreshStateBinding
                 .inflate(LayoutInflater.from(parent.context),parent, false)
 
-            return CharactersLoadMoreStateViewHolder(itemBinding, retry)
+            return CharactersRefreshStateViewHolder(itemBinding, retry)
         }
     }
 
