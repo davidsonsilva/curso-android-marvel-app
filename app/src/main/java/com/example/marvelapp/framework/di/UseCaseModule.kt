@@ -12,6 +12,8 @@ import me.davidsonsilva.core.usecase.AddFavoriteUseCaseImpl
 import me.davidsonsilva.core.usecase.AddFavoriteUseCase
 import me.davidsonsilva.core.usecase.CheckFavoriteUseCaseImpl
 import me.davidsonsilva.core.usecase.CheckFavoriteUseCase
+import me.davidsonsilva.core.usecase.GetFavoritesUseCase
+import me.davidsonsilva.core.usecase.GetFavoritesUseCaseImpl
 import me.davidsonsilva.core.usecase.RemoveFavoriteUseCase
 import me.davidsonsilva.core.usecase.RemoveFavoriteUseCaseImpl
 
@@ -33,4 +35,7 @@ interface UseCaseModule {
 
     @Binds
     fun bindRemoveFavoriteUseCase(useCase: RemoveFavoriteUseCaseImpl): RemoveFavoriteUseCase
+
+    @Binds
+    fun bindGetFavoritesUseCase(useCase: GetFavoritesUseCaseImpl): GetFavoritesUseCase
 }
