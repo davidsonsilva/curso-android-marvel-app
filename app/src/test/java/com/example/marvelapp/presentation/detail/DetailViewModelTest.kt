@@ -15,7 +15,10 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import me.davidsonsilva.core.base.ResultStatus
 import me.davidsonsilva.core.domain.model.Comic
+import me.davidsonsilva.core.usecase.AddFavoriteUseCase
+import me.davidsonsilva.core.usecase.CheckFavoriteUseCase
 import me.davidsonsilva.core.usecase.GetCharacterCategoriesUseCase
+import me.davidsonsilva.core.usecase.RemoveFavoriteUseCase
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -31,7 +34,19 @@ class DetailViewModelTest:BaseTest(){
     lateinit var  getCharacterCategoriesUseCase: GetCharacterCategoriesUseCase
 
     @Mock
-    private lateinit var  uiStateObserver: Observer<DetailViewModel.UiState>
+    private lateinit var  uiStateObserver: Observer<UiActionStateLiveData.UiState>
+
+    @Mock
+    private lateinit var  favoriteUiStateObserver: Observer<FavoriteUiActionStateLivedata.UiState>
+
+    @Mock
+    private lateinit var addFavoriteUseCase: AddFavoriteUseCase
+
+    @Mock
+    private lateinit var removeFavoriteUseCase: RemoveFavoriteUseCase
+
+    @Mock
+    private lateinit var checkFavoriteUseCase: CheckFavoriteUseCase
 
     private lateinit var detailViewModel: DetailViewModel
 
@@ -41,8 +56,16 @@ class DetailViewModelTest:BaseTest(){
 
     @Before
     fun setup(){
-        detailViewModel = DetailViewModel(getCharacterCategoriesUseCase)
-        detailViewModel.uiState.observeForever(uiStateObserver)
+        detailViewModel = DetailViewModel(
+            getCharacterCategoriesUseCase,
+            checkFavoriteUseCase,
+            addFavoriteUseCase,
+            removeFavoriteUseCase,
+            mainCoroutineRule.testDispatcherProvider
+        ).apply {
+            categories.state.observeForever(uiStateObserver)
+            favorite.state.observeForever(favoriteUiStateObserver)
+        }
     }
 
     @Test
@@ -55,12 +78,12 @@ class DetailViewModelTest:BaseTest(){
                 )
 
             //Act
-            detailViewModel.getCharacterCategories(character.id)
+            detailViewModel.categories.load(character.id)
 
             //Assert
-            verify(uiStateObserver).onChanged(isA<DetailViewModel.UiState.Success>())
+            verify(uiStateObserver).onChanged(isA<UiActionStateLiveData.UiState.Success>())
 
-            val uiStateSuccess = detailViewModel.uiState.value as DetailViewModel.UiState.Success
+            val uiStateSuccess = detailViewModel.categories.state.value as UiActionStateLiveData.UiState.Success
             val categoriesParentList = uiStateSuccess.detailParentList
 
             assertEquals(2, categoriesParentList.size)
@@ -83,12 +106,12 @@ class DetailViewModelTest:BaseTest(){
                     flowOf(ResultStatus.Success(comics to emptyList()))
                 )
             //Act
-            detailViewModel.getCharacterCategories(character.id)
+            detailViewModel.categories.load(character.id)
 
             //Assert
-            verify(uiStateObserver).onChanged(isA<DetailViewModel.UiState.Success>())
+            verify(uiStateObserver).onChanged(isA<UiActionStateLiveData.UiState.Success>())
 
-            val uiStateSuccess = detailViewModel.uiState.value as DetailViewModel.UiState.Success
+            val uiStateSuccess = detailViewModel.categories.state.value as UiActionStateLiveData.UiState.Success
             val categoriesParentList = uiStateSuccess.detailParentList
 
             assertEquals(1, categoriesParentList.size)
@@ -108,12 +131,12 @@ class DetailViewModelTest:BaseTest(){
                     flowOf(ResultStatus.Success(emptyList<Comic>() to events))
                 )
             //Act
-            detailViewModel.getCharacterCategories(character.id)
+            detailViewModel.categories.load(character.id)
 
             //Assert
-            verify(uiStateObserver).onChanged(isA<DetailViewModel.UiState.Success>())
+            verify(uiStateObserver).onChanged(isA<UiActionStateLiveData.UiState.Success>())
 
-            val uiStateSuccess = detailViewModel.uiState.value as DetailViewModel.UiState.Success
+            val uiStateSuccess = detailViewModel.categories.state.value as UiActionStateLiveData.UiState.Success
             val categoriesParentList = uiStateSuccess.detailParentList
 
             assertEquals(1, categoriesParentList.size)
@@ -132,10 +155,10 @@ class DetailViewModelTest:BaseTest(){
                     flowOf(ResultStatus.Success(emptyList<Comic>() to emptyList()))
                 )
             //Act
-            detailViewModel.getCharacterCategories(character.id)
+            detailViewModel.categories.load(character.id)
 
             //Assert
-            verify(uiStateObserver).onChanged(isA<DetailViewModel.UiState.Empty>())
+            verify(uiStateObserver).onChanged(isA<UiActionStateLiveData.UiState.Empty>())
 
         }
 
@@ -148,9 +171,101 @@ class DetailViewModelTest:BaseTest(){
                     flowOf(ResultStatus.Error(Throwable()))
                 )
             //Act
-            detailViewModel.getCharacterCategories(character.id)
+            detailViewModel.categories.load(character.id)
 
             //Assert
-            verify(uiStateObserver).onChanged(isA<DetailViewModel.UiState.Error>())
+            verify(uiStateObserver).onChanged(isA<UiActionStateLiveData.UiState.Error>())
+        }
+
+    @Test
+    fun `should notify favorite_uiState with filled favorite icon when check favorite returns true`() =
+        runTest {
+            // Arrange
+            whenever(checkFavoriteUseCase.invoke(any()))
+                .thenReturn(
+                    flowOf(ResultStatus.Success(true))
+                )
+            // Action
+            detailViewModel.favorite.checkFavorite(any())
+
+            // Assert
+            verify(favoriteUiStateObserver).onChanged(
+                isA<FavoriteUiActionStateLivedata.UiState.Icon>()
+            )
+            val uiState = detailViewModel.favorite.state.value as
+                    FavoriteUiActionStateLivedata.UiState.Icon
+            assertEquals(uiState.icon, R.drawable.ic_favorite_checked)
+        }
+
+    @Test
+    fun `should notify favorite_uiState with not filled favorite icon when check favorite returns false`() =
+        runTest {
+            // Arrange
+            whenever(checkFavoriteUseCase.invoke(any()))
+                .thenReturn(
+                    flowOf(ResultStatus.Success(false))
+                )
+            // Action
+            detailViewModel.favorite.checkFavorite(any())
+
+            // Assert
+            verify(favoriteUiStateObserver).onChanged(
+                isA<FavoriteUiActionStateLivedata.UiState.Icon>()
+            )
+            val uiState = detailViewModel.favorite.state.value as
+                    FavoriteUiActionStateLivedata.UiState.Icon
+            assertEquals(uiState.icon, R.drawable.ic_favorite_unchecked)
+        }
+
+    @Test
+    fun `should notify favorite_uiState with filled favorite icon when current icon is unchecked`() =
+        runTest {
+            // Arrange
+            whenever(addFavoriteUseCase.invoke(any()))
+                .thenReturn(
+                    flowOf(
+                        ResultStatus.Success(Unit)
+                    )
+                )
+
+            // Act
+            detailViewModel.run {
+                favorite.currentFavoriteIcon = R.drawable.ic_favorite_unchecked
+                favorite.update(
+                    DetailViewArgs(character.id, character.name, character.imageUrl)
+                )
+            }
+
+            // Assert
+            verify(favoriteUiStateObserver).onChanged(isA<FavoriteUiActionStateLivedata.UiState.Icon>())
+            val uiState =
+                detailViewModel.favorite.state.value as FavoriteUiActionStateLivedata.UiState.Icon
+            assertEquals(R.drawable.ic_favorite_checked, uiState.icon)
+        }
+
+    @Test
+    fun `should call remove and notify favorite_uiState with filled favorite icon when current icon is checked`() =
+        runTest {
+            // Arrange
+            whenever(removeFavoriteUseCase.invoke(any()))
+                .thenReturn(
+                    flowOf(
+                        ResultStatus.Success(Unit)
+                    )
+                )
+
+            // Act
+            detailViewModel.run {
+                favorite.currentFavoriteIcon = R.drawable.ic_favorite_checked
+                favorite.update(
+                    DetailViewArgs(character.id, character.name, character.imageUrl)
+                )
+            }
+
+            // Assert
+            verify(favoriteUiStateObserver).onChanged(isA<FavoriteUiActionStateLivedata.UiState.Icon>())
+            val uiState =
+                detailViewModel.favorite.state.value as FavoriteUiActionStateLivedata.UiState.Icon
+            assertEquals(R.drawable.ic_favorite_unchecked, uiState.icon)
         }
 }

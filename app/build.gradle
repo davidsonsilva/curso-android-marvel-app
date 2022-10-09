@@ -47,6 +47,7 @@ android {
 
     testOptions {
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled = true
     }
 
     buildTypes {
@@ -160,5 +161,7 @@ dependencies {
 
     def mockWebServer_version = "4.10.0"
     androidTestImplementation "com.squareup.okhttp3:mockwebserver:$mockWebServer_version"
+
+    androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
 
 }
