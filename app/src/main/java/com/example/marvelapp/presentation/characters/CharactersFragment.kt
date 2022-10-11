@@ -2,15 +2,22 @@ package com.example.marvelapp.presentation.characters
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.example.marvelapp.R
 import com.example.marvelapp.databinding.FragmentCharactersBinding
 import com.example.marvelapp.framework.imageloader.ImageLoader
 import com.example.marvelapp.presentation.characters.adapters.CharactersAdapter
@@ -25,13 +32,13 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CharactersFragment : Fragment() {
 
-    private var _binding : FragmentCharactersBinding? = null
-    private val binding : FragmentCharactersBinding get() = _binding!!
+    private var _binding: FragmentCharactersBinding? = null
+    private val binding: FragmentCharactersBinding get() = _binding!!
 
     private val viewModel: CharactersViewModel by viewModels()
 
     private val charactersAdapter: CharactersAdapter by lazy {
-        CharactersAdapter(imageLoader = imageLoader){character, view ->
+        CharactersAdapter(imageLoader = imageLoader) { character, view ->
             val extras = FragmentNavigatorExtras(
                 view to character.name
             )
@@ -41,7 +48,8 @@ class CharactersFragment : Fragment() {
                     DetailViewArgs(
                         characterId = character.id,
                         name = character.name,
-                        imageUrl = character.imageUrl)
+                        imageUrl = character.imageUrl
+                    )
                 )
 
             findNavController().navigate(directions = directions, extras)
@@ -53,6 +61,30 @@ class CharactersFragment : Fragment() {
 
     private val headerAdapter: CharactersRefreshStateAdapter by lazy {
         CharactersRefreshStateAdapter(charactersAdapter::retry)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val menuHostFragment: MenuHost = requireActivity()
+        menuHostFragment.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                // Add menu items here
+                menuInflater.inflate(R.menu.characters_menu_items, menu)
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Handle the menu selection
+                return when (menuItem.itemId) {
+                    R.id.menu_sort -> {
+                        findNavController().navigate(
+                            R.id.action_charactersFragment_to_sortFragment
+                        )
+                        true
+                    }
+                    else -> false
+                }
+            }
+        })
     }
 
     override fun onCreateView(

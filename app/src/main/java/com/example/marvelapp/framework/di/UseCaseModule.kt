@@ -12,10 +12,14 @@ import me.davidsonsilva.core.usecase.AddFavoriteUseCaseImpl
 import me.davidsonsilva.core.usecase.AddFavoriteUseCase
 import me.davidsonsilva.core.usecase.CheckFavoriteUseCaseImpl
 import me.davidsonsilva.core.usecase.CheckFavoriteUseCase
+import me.davidsonsilva.core.usecase.GetCharactersSortingUseCase
+import me.davidsonsilva.core.usecase.GetCharactersSortingUseCaseImpl
 import me.davidsonsilva.core.usecase.GetFavoritesUseCase
 import me.davidsonsilva.core.usecase.GetFavoritesUseCaseImpl
 import me.davidsonsilva.core.usecase.RemoveFavoriteUseCase
 import me.davidsonsilva.core.usecase.RemoveFavoriteUseCaseImpl
+import me.davidsonsilva.core.usecase.SaveCharactersSortingUseCase
+import me.davidsonsilva.core.usecase.SaveCharactersSortingUseCaseImpl
 
 @Module
 @InstallIn(ViewModelComponent::class)
@@ -38,4 +42,12 @@ interface UseCaseModule {
 
     @Binds
     fun bindGetFavoritesUseCase(useCase: GetFavoritesUseCaseImpl): GetFavoritesUseCase
+
+    @Binds
+    fun bindGetCharactersSortingUseCase(useCase: GetCharactersSortingUseCaseImpl):
+            GetCharactersSortingUseCase
+
+    @Binds
+    fun bindSaveCharactersSortingUseCase(useCase: SaveCharactersSortingUseCaseImpl):
+            SaveCharactersSortingUseCase
 }

@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.marvelapp.R
 import com.example.marvelapp.databinding.ActivityMainBinding
@@ -25,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setSupportActionBar(binding.toolbarApp)
+
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_container)
                 as NavHostFragment
 
@@ -32,9 +35,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.bottomNavMain.setupWithNavController(navController)
 
-        appBarConfigurattion = AppBarConfiguration(setOf(R.id.charactersFragment,
-            R.id.favoritesFragment,R.id.aboutFragment))
+        appBarConfigurattion = AppBarConfiguration(
+            setOf(
+                R.id.charactersFragment,
+                R.id.favoritesFragment,
+                R.id.aboutFragment,
+                R.id.sortFragment
+            )
+        )
 
+        setupActionBarWithNavController(navController, appBarConfigurattion)
         binding.toolbarApp.setupWithNavController(navController, appBarConfigurattion)
 
         navController.addOnDestinationChangedListener {_,destination,_->
