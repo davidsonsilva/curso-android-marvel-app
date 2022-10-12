@@ -16,7 +16,7 @@ interface CharactersRepository {
 
     suspend fun getEvents(characterId: Int): List<Event>
 
-    fun getCachedCharacters(query: String, pagingConfig: PagingConfig):
+    fun getCachedCharacters(query: String, orderBy:String, pagingConfig: PagingConfig):
             Flow<PagingData<Character>>
 
 }

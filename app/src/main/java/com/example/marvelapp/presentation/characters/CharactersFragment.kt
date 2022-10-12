@@ -7,12 +7,15 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isNotEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -24,18 +27,22 @@ import com.example.marvelapp.presentation.characters.adapters.CharactersAdapter
 import com.example.marvelapp.presentation.characters.adapters.CharactersLoadMoreStateAdapter
 import com.example.marvelapp.presentation.characters.adapters.CharactersRefreshStateAdapter
 import com.example.marvelapp.presentation.detail.DetailViewArgs
+import com.example.marvelapp.presentation.sort.SortFragment.Companion.SORTING_APPLIED_BASK_STACK_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class CharactersFragment : Fragment() {
+class CharactersFragment : Fragment(), SearchView.OnQueryTextListener,
+    MenuItem.OnActionExpandListener {
 
     private var _binding: FragmentCharactersBinding? = null
     private val binding: FragmentCharactersBinding get() = _binding!!
 
     private val viewModel: CharactersViewModel by viewModels()
+
+    private lateinit var searchView: SearchView
 
     private val charactersAdapter: CharactersAdapter by lazy {
         CharactersAdapter(imageLoader = imageLoader) { character, view ->
@@ -71,6 +78,22 @@ class CharactersFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 // Add menu items here
                 menuInflater.inflate(R.menu.characters_menu_items, menu)
+
+                val searchItem = menu.findItem(R.id.menu_search)
+                searchView = searchItem.actionView as SearchView
+
+                searchItem.setOnActionExpandListener(this@CharactersFragment)
+
+                if(viewModel.currentSearchQuery.isNullOrEmpty().not()){
+                    searchItem.expandActionView()
+                    searchView.setQuery(viewModel.currentSearchQuery, false)
+                }
+
+                searchView.run {
+                    isSubmitButtonEnabled = true
+                    setOnQueryTextListener(this@CharactersFragment)
+                }
+
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Handle the menu selection
@@ -98,6 +121,7 @@ class CharactersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initCharactersAdapter()
         observeInitialLoadState()
+        observeSortingData()
 
         viewModel.state.observe(viewLifecycleOwner) { uiState ->
             when (uiState) {
@@ -172,8 +196,50 @@ class CharactersFragment : Fragment() {
         }
     }
 
+    private fun observeSortingData() {
+        val navBackStackEntry = findNavController().getBackStackEntry(R.id.charactersFragment)
+        val observer = LifecycleEventObserver { _, event ->
+            val isSortingApplied = navBackStackEntry.savedStateHandle
+                .contains(SORTING_APPLIED_BASK_STACK_KEY)
+            if (event == Lifecycle.Event.ON_RESUME && isSortingApplied) {
+                viewModel.applySort()
+                navBackStackEntry.savedStateHandle.remove<Boolean>(SORTING_APPLIED_BASK_STACK_KEY)
+            }
+        }
+        navBackStackEntry.lifecycle.addObserver(observer)
+        viewLifecycleOwner.lifecycle.addObserver(LifecycleEventObserver{ _, event ->
+            if( event == Lifecycle.Event.ON_DESTROY) {
+                navBackStackEntry.lifecycle.removeObserver(observer)
+            }
+        })
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return query?.let {
+            viewModel.currentSearchQuery = it
+            viewModel.searchCharacters()
+            true
+        }?: false
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        return true
+    }
+
+    override fun onMenuItemActionExpand(item: MenuItem): Boolean {
+        return true
+    }
+
+    override fun onMenuItemActionCollapse(item: MenuItem): Boolean {
+        viewModel.closeSearch()
+        viewModel.searchCharacters()
+        return true
+    }
+
     override fun onDestroy() {
         super.onDestroy()
+        if (searchView.isNotEmpty())
+            searchView.setOnQueryTextListener(null)
         _binding = null
     }
 
@@ -182,4 +248,8 @@ class CharactersFragment : Fragment() {
         private const val FLIPPER_CHILD_CHARACTERS = 1
         private const val FLIPPER_CHILD_ERROR = 2
     }
+
+
+
+
 }
